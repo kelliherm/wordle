@@ -1,7 +1,6 @@
-#from operator import countOf
 import random
 
-class Wordle():
+class WordleBoard():
     def __init__(self):
         self.green = '\U0001F7E9'
         self.yellow = '\U0001F7E8'

@@ -1,9 +1,6 @@
-from wordlegame import Wordle
+from wordlegame import WordleBoard
 
-game = Wordle()
-
-hiddenword = 'CRANE'
-game.hiddenword = hiddenword
+game = WordleBoard()
 
 gamewon = False
 guessnum = 1
@@ -16,7 +13,7 @@ while (guessnum <= 6) and (gamewon == False):
     game.UpdateBoard(guess, guessnum)
     game.DrawBoard()
 
-    if guess == hiddenword:
+    if guess == game.hiddenword:
         print('You won the game!')
         exit()
 
