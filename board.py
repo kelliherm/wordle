@@ -1,6 +1,9 @@
-import random
+import colorama
+from colorama import Fore
 
-class WordleBoard():
+colorama.init()
+
+class Board():
     def __init__(self):
         self.green = '\U0001F7E9'
         self.yellow = '\U0001F7E8'
@@ -27,17 +30,7 @@ class WordleBoard():
             '60' : self.white, '61' : self.white, '62' : self.white, '63' : self.white, '64' : self.white,
         }
 
-        self.legalwords = []
-        legalwordsfile = open('legalwords.txt')
-        for line in legalwordsfile:
-            self.legalwords.append(line[:-1])
-        legalwordsfile.close()
-
-        self.hiddenword = random.choice(self.legalwords)
-    
     def DrawBoard(self):
-        # Draws the game board with both all of the guesses and all of the markers for placement
-        
         print(self.boardchar['10'] + self.boardchar['11'] + self.boardchar['12'] + self.boardchar['13'] + self.boardchar['14'], end='')
         print(self.breaksym, end='')
         print(self.boardstatus['10'] + self.boardstatus['11'] + self.boardstatus['12'] + self.boardstatus['13'] + self.boardstatus['14'])
@@ -63,29 +56,6 @@ class WordleBoard():
         print(self.boardstatus['60'] + self.boardstatus['61'] + self.boardstatus['62'] + self.boardstatus['63'] + self.boardstatus['64'])
 
         print()
-    
-    def Intro(self):
-        pass # All of the intro code is going to go here, explain the game, etc
-
-    def GetInput(self, computer=False, computerinput=None):
-        # Functions for both if the computer is guessing and if a human is guessing
-        
-        if computer == True:
-            guess = computerinput.upper()
-            return guess
-
-        elif computer == False:
-            guess = input('Enter Guess: ').upper()
-
-            if len(guess) != 5:
-                print('Guess must be 5 letters')
-                guess = self.GetInput()
-            
-            elif guess not in self.legalwords:
-                print('Guess must be in legal words')
-                guess = self.GetInput()
-        
-            return guess
     
     def UpdateBoard(self, guess, guessnum):
         usedletters = []
