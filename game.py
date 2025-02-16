@@ -70,5 +70,4 @@ class Game():
 
 if __name__ == "__main__":
     myGame = Game()
-    myGame.hiddenWord = "SWALY"
     myGame.Play()
