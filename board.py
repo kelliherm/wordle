@@ -13,7 +13,7 @@ class Board():
             if row != []:
                 for char in row:
                     print(self.boardColors[char[0]] + char[1], end="")
-                print()
+                print(colorama.Style.RESET_ALL)
         print()
  
     def UpdateBoard(self, guessnum, userguess, guesskey):

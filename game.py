@@ -9,8 +9,6 @@ class Game():
         
         self.DefineLegalWords()
         self.hiddenWord = self.DefineHiddenWord()
-
-        self.Play()
     
     def Play(self):
         while self.numGuesses < 6 and self.gameOver == False:
@@ -25,9 +23,11 @@ class Game():
             self.numGuesses += 1
 
             if guess == self.hiddenWord:
+                self.board.DrawBoard()
                 print(f"You have won the game in {self.numGuesses} guesses!")
                 self.gameOver = True
             elif self.numGuesses == 6:
+                self.board.DrawBoard()
                 print("You have lost the game.")
                 print(f"The hidden word was {self.hiddenWord}.")
                 self.gameOver = True
@@ -58,13 +58,17 @@ class Game():
 
         for digit in range(5):
             if guess[digit] in self.hiddenWord and self.hiddenWord.count(guess[digit]) > usedletters.count(guess[digit]):
-                key[digit] = "1"
-                usedletters.append(guess[digit])
+                if key[digit] == "":
+                    key[digit] = "1"
+                    usedletters.append(guess[digit])
             else:
-                key[digit] = "0"
+                if key[digit] == "":
+                    key[digit] = "0"
 
         return "".join(key)
 
 
 if __name__ == "__main__":
     myGame = Game()
+    myGame.hiddenWord = "SWALY"
+    myGame.Play()
