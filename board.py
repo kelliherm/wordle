@@ -19,3 +19,6 @@ class Board():
     def UpdateBoard(self, guessnum, userguess, guesskey):
         guess = [(int(guesskey[0]),userguess[0]),(int(guesskey[1]),userguess[1]),(int(guesskey[2]),userguess[2]),(int(guesskey[3]),userguess[3]),(int(guesskey[4]),userguess[4])]
         self.board[guessnum] = guess
+
+    def ResetBoard(self):
+        self.board = [[] for i in range(6)]

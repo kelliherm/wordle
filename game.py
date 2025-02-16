@@ -2,13 +2,13 @@ import random
 import board
 
 class Game():
-    def __init__(self):
+    def __init__(self, hardmode=True):
         self.gameOver = False
         self.numGuesses = 0
         self.board = board.Board()
         
         self.DefineLegalWords()
-        self.hiddenWord = self.DefineHiddenWord()
+        self.hiddenWord = self.DefineHiddenWord(hard=hardmode)
     
     def Play(self):
         while self.numGuesses < 6 and self.gameOver == False:
@@ -32,6 +32,12 @@ class Game():
                 print(f"The hidden word was {self.hiddenWord}.")
                 self.gameOver = True
 
+    def Reset(self, hardmode=True):
+        self.gameOver = False
+        self.numGuesses = 0
+        self.board.ResetBoard()
+        self.hiddenWord = self.DefineHiddenWord(hard=hardmode)
+
     def DefineLegalWords(self) -> None:
         self.legalWords = []
         legalwordsfile = open("legalwords.txt")
@@ -39,8 +45,11 @@ class Game():
             self.legalWords.append(line[:-1])
         legalwordsfile.close()
     
-    def DefineHiddenWord(self) -> str:
-        return random.choice(self.legalWords)
+    def DefineHiddenWord(self, hardmode=True) -> str:
+        if hardmode == True:
+            return random.choice(self.legalWords)
+        else:
+            return random.choice(self.legalWords)
 
     def GetGuess(self) -> str:
         return input("Enter guess: ").upper()
