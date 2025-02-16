@@ -2,7 +2,7 @@ import random
 import board
 
 class Game():
-    def __init__(self):
+    def __init__(self, computer=False):
         self.gameOver = False
         self.numGuesses = 0
         self.board = board.Board()
