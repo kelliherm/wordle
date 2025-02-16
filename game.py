@@ -9,7 +9,7 @@ class Game():
         self.difficultyHard = hardmode
         
         self.DefineLegalWords()
-        self.hiddenWord = self.DefineHiddenWord(hard=self.difficultyHard)
+        self.hiddenWord = self.DefineHiddenWord(hardmode=self.difficultyHard)
     
     def Play(self) -> None:
         while self.numGuesses < 6 and self.gameOver == False:
@@ -43,7 +43,10 @@ class Game():
         self.legalWords = []
         legalwordsfile = open("legalwords.txt")
         for line in legalwordsfile:
-            self.legalWords.append(line[:-1])
+            if line[-1] == "\n":
+                self.legalWords.append(line[:-1])
+            else:
+                self.legalWords.append(line)
         legalwordsfile.close()
     
     def ReturnLegalWords(self) -> list:
