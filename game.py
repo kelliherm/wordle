@@ -2,15 +2,16 @@ import random
 import board
 
 class Game():
-    def __init__(self, hardmode=True):
+    def __init__(self, computer=False, hardmode=True):
         self.gameOver = False
         self.numGuesses = 0
         self.board = board.Board()
+        self.difficultyHard = hardmode
         
         self.DefineLegalWords()
-        self.hiddenWord = self.DefineHiddenWord(hard=hardmode)
+        self.hiddenWord = self.DefineHiddenWord(hard=self.difficultyHard)
     
-    def Play(self):
+    def Play(self) -> None:
         while self.numGuesses < 6 and self.gameOver == False:
             self.board.DrawBoard()
             print(f"You have {6 - self.numGuesses} remaining.")
@@ -32,7 +33,7 @@ class Game():
                 print(f"The hidden word was {self.hiddenWord}.")
                 self.gameOver = True
 
-    def Reset(self, hardmode=True):
+    def Reset(self, hardmode=True) -> None:
         self.gameOver = False
         self.numGuesses = 0
         self.board.ResetBoard()
@@ -45,6 +46,13 @@ class Game():
             self.legalWords.append(line[:-1])
         legalwordsfile.close()
     
+    def ReturnLegalWords(self) -> list:
+        if self.difficultyHard == True and self.legalWords != None:
+            return self.legalWords
+        if self.legalWords == None:
+            self.DefineLegalWords()
+            self.ReturnLegalWords()
+
     def DefineHiddenWord(self, hardmode=True) -> str:
         if hardmode == True:
             return random.choice(self.legalWords)
@@ -56,17 +64,22 @@ class Game():
 
         # TODO Error correction required
 
-    def DetermineKey(self, guess) -> str:
+    def DetermineKey(self, guess, answer=None) -> str:
         usedletters = []
         key = ["","","","",""]
 
+        if answer != None:
+            secret = answer
+        else:
+            secret = self.hiddenWord
+
         for digit in range(5):
-            if guess[digit] == self.hiddenWord[digit]:
+            if guess[digit] == secret[digit]:
                 key[digit] = "2"
                 usedletters.append(guess[digit])
 
         for digit in range(5):
-            if guess[digit] in self.hiddenWord and self.hiddenWord.count(guess[digit]) > usedletters.count(guess[digit]):
+            if guess[digit] in secret and secret.count(guess[digit]) > usedletters.count(guess[digit]):
                 if key[digit] == "":
                     key[digit] = "1"
                     usedletters.append(guess[digit])
