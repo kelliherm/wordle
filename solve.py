@@ -6,6 +6,25 @@ class Computer():
         self.legalWords = self.game.ReturnLegalWords()
         self.availibleWords = self.legalWords
 
+    def DetermineOptimalGuess(self, progress=False):
+        values = {}
+        n = 0
+        for guess in self.availibleWords:
+            value = self.ExpectedValue(guess)
+            if value in values.keys():
+                values[value].append(guess)
+            else:
+                values[value] = [guess]
+            n += 1
+            
+            if progress == True:
+                if n % 100 == 0:
+                    print(n)
+        
+        values = dict(sorted(values.items(), reverse=True))
+        #print({k: v for i, (k, v) in enumerate(values.items()) if i < 100})
+        return values[next(iter(values))][0]
+
     def ExpectedValue(self, guess) -> int:
         scatterplot = {}
         for word in self.legalWords:
@@ -29,11 +48,12 @@ class Computer():
         
         return score
 
-    def Sort(self) -> None:
+    def Sort(self) -> list:
         pass
 
 
 if __name__ == "__main__":
     myTest = Computer()
-    print(myTest.ExpectedValue("CRANE"))
-    print(myTest.ExpectedValue("MAGMA"))
+    #print(myTest.ExpectedValue("CRANE"))
+    #print(myTest.ExpectedValue("MAGMA"))
+    print(myTest.DetermineOptimalGuess(progress=True))
