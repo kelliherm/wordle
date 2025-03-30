@@ -12,7 +12,7 @@ class Game():
         self.hiddenWord = self.DefineHiddenWord(hardmode=self.difficultyHard)
     
     def Play(self) -> None:
-        while self.numGuesses < 6 and self.gameOver == False:
+        while self.gameOver == False:
             self.board.DrawBoard()
             print(f"You have {6 - self.numGuesses} remaining.")
             guess = self.GetGuess() 
