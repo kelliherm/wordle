@@ -7,6 +7,8 @@ class Board():
         print()
         for row in self.board:
             if row != []:
+                print(self.board.index(row) + 1, end="")
+                print("  ", end="")
                 for char in row:
                     print(char[0], end="")
                 print("  ", end="")
@@ -30,6 +32,7 @@ class Board():
 if __name__ == "__main__":
     myBoard = Board()
 
-    myBoard.UpdateBoard(1, "CRANE", "🟩⬛🟨⬛🟨")
+    myBoard.UpdateBoard(0, "SALET", "⬛⬛⬛⬛🟩")
+    myBoard.UpdateBoard(1, "GIANT", "🟩🟨⬛⬛🟩")
 
     myBoard.DrawBoard()
