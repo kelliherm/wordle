@@ -33,7 +33,7 @@ class Game():
                 print(f"The hidden word was {self.secretWord}.")
                 self.gameOver = True
 
-    def ResetGame(self, hardmode=True) -> None:
+    def ResetGame(self) -> None:
         self.gameOver = False
         self.numGuesses = 0
         self.board.ResetBoard()

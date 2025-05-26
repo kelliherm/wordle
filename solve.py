@@ -4,7 +4,6 @@ import game
 class ComputerSolve():
     def __init__(self):
         self.game = game.Game()
-        #self.legalWords = self.game.ReturnLegalWords()
         self.legalWords = self.game.legalWords
         self.availibleWords = self.legalWords
 
@@ -23,19 +22,29 @@ class ComputerSolve():
 
     def GetExpectedValue(self, userguess) -> float:
         options = ["🟩", "🟨", "⬛"]
+        wordslist = self.legalWords
+        n = len(wordslist)
+        keys = {}
+        for i in options:
+            for j in options:
+                for k in options:
+                    for l in options:
+                        for m in options:
+                            keys[i + j + k + l + m] = 0
+
+        for word in wordslist:
+            keys[self.game.DetermineKey(userguess, word)] += 1
+
         expected_val = 0
-        n = len(self.availibleWords)
 
         for i in options:
             for j in options:
                 for k in options:
                     for l in options:
                         for m in options:
-                            userkey = i + j + k + l + m
-                            px = self.GetNumPossibleMatches(userguess, userkey) / n
-                            print(userkey + "   " + str(px))
+                            px = keys[i + j + k + l + m] / n
                             if px != 0:
-                                expected_val += -1 * px * math.log(px, 2)
+                                expected_val += -1 * px * math.log2(px)
         
         return expected_val
 
@@ -85,13 +94,11 @@ class ComputerSolve():
         
         return unsorted
 
-    def ReplaceAvailibleWords(self, words) -> None:
-        self.availibleWords = words
-
 
 if __name__ == "__main__":
     myTest = ComputerSolve()
-    myTest.game.hiddenWord = "BLARE"
+
+    #myTest.game.hiddenWord = "BLARE"
 
     myGuessA = "CRANE"
     myGuessB = "DOORS"
@@ -107,10 +114,15 @@ if __name__ == "__main__":
     myValueA = myTest.GetExpectedValue(myGuessA)
     myValueB = myTest.GetExpectedValue(myGuessB)
 
-    #print(myValueA)
-    #print(myValueB)
+    print(myValueA)
+    print(myValueB)
 
     #print(myTest.GetNumPossibleMatches(myGuessA, myTest.game.DetermineKey(myGuessA)))
     #print(myTest.GetNumPossibleMatches(myGuessB, myTest.game.DetermineKey(myGuessB)))
 
     #myTest.GetOptimalGuess()
+
+    #print(myTest.game.DetermineKey("SPEED", answer="ABIDE"))
+    #print(myTest.game.DetermineKey("SPEED", answer="ERASE"))
+    #print(myTest.game.DetermineKey("SPEED", answer="STEAL"))
+    #print(myTest.game.DetermineKey("SPEED", answer="CREPE"))
