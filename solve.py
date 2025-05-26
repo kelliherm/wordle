@@ -21,7 +21,7 @@ class ComputerSolve():
                             keys[i + j + k + l + m] = 0
 
         for word in wordslist:
-            keys[self.game.DetermineKey(userguess, word)] += 1
+            keys[self.game.DetermineKey(userguess, answer=word)] += 1
 
         expected_val = 0
 
@@ -51,23 +51,30 @@ class ComputerSolve():
         sortedwordlist = sorted(possibleguesses.items(), key=lambda item: item[1], reverse=True)
 
         return sortedwordlist[0][0]
+    
+    def RemoveExtraWords(self, information) -> None:
+        pass
+
+    def IsWordPossible(self, word, information_list) -> bool:
+        for information in information_list:
+            for index in range(len(word)):
+                if word[index] == information[0][index] and information[1][index] == "🟩":
+                    pass
+                # Statement to determine yellows
+                elif word[index] == information[0][index] and information[1][index] == "⬛":
+                    return False
+        return True
 
 
 if __name__ == "__main__":
     myTest = ComputerSolve()
 
-    #myTest.game.hiddenWord = "BLARE"
+    import time
+
+    start_time = time.perf_counter()
 
     #myGuessA = "CRANE"
     #myGuessB = "DOORS"
-    
-    #myKeyA = myTest.game.DetermineKey(myGuessA)
-    #myKeyA = "01202"
-
-    #myKeyB = myTest.game.DetermineKey(meGuessB)
-    #myKeyB = "00020"
-
-    #myTest.GetPossibleMatches(myGuessA, myKey)
     
     #myValueA = myTest.GetExpectedValue(myGuessA)
     #myValueB = myTest.GetExpectedValue(myGuessB)
@@ -75,21 +82,13 @@ if __name__ == "__main__":
     #print(myValueA)
     #print(myValueB)
 
-    import time
+    #print(myTest.GetOptimalGuess())
 
-    start_time = time.perf_counter()
-
-    #print(myTest.GetNumPossibleMatches(myGuessA, myTest.game.DetermineKey(myGuessA)))
-    #print(myTest.GetNumPossibleMatches(myGuessB, myTest.game.DetermineKey(myGuessB)))
-
-    print(myTest.GetOptimalGuess())
+    print(myTest.IsWordPossible("DRONE", [("CRANE", "⬛🟩⬛🟩🟩")]))
+    print(myTest.IsWordPossible("DRONE", [("MAGMA", "⬛⬛⬛⬛⬛"), ("DOORS", "🟩⬛🟩🟨⬛")]))
+    print(myTest.IsWordPossible("LIONS", [("MAGMA", "⬛⬛⬛⬛⬛"), ("DOORS", "🟩⬛🟩🟨⬛")]))
 
     end_time = time.perf_counter()
     elapsed_time = end_time - start_time
 
     print(f"Elapsed time: {elapsed_time:.4f} seconds")
-
-    #print(myTest.game.DetermineKey("SPEED", answer="ABIDE"))
-    #print(myTest.game.DetermineKey("SPEED", answer="ERASE"))
-    #print(myTest.game.DetermineKey("SPEED", answer="STEAL"))
-    #print(myTest.game.DetermineKey("SPEED", answer="CREPE"))
