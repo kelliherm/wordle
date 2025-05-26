@@ -1,4 +1,5 @@
 import math
+import json
 import game
 
 class ComputerSolve():
@@ -6,19 +7,6 @@ class ComputerSolve():
         self.game = game.Game()
         self.legalWords = self.game.legalWords
         self.availibleWords = self.legalWords
-
-    def GetOptimalGuess(self) -> str:
-        allpossibleguesses = []
-        total = len(self.availibleWords)
-        n = 1
-        for possibleguess in self.availibleWords:
-            value = self.GetExpectedValue(possibleguess)
-            allpossibleguesses.append((value, possibleguess))
-            print(str(n) + " / " + str(total))
-            n += 1
-        
-        #return self.InsertionSort(allpossibleguesses)
-        print(self.InsertionSort(allpossibleguesses))
 
     def GetExpectedValue(self, userguess) -> float:
         options = ["🟩", "🟨", "⬛"]
@@ -48,7 +36,23 @@ class ComputerSolve():
         
         return expected_val
 
-    def GetNumPossibleMatches(self, guess, key) -> int:
+    def GetOptimalGuess(self) -> str:
+        possibleguesses = {}
+        wordslist = self.legalWords
+        for word in wordslist:
+            possibleguesses[word] = self.GetExpectedValue(word)
+
+        '''with open("data.json", "w") as file:
+            json.dump(possibleguesses, file, indent=4)
+
+        with open("data.json", "r") as file:
+            possibleguesses = json.load(file)'''
+
+        sortedwordlist = sorted(possibleguesses.items(), key=lambda item: item[1], reverse=True)
+
+        return sortedwordlist[0][0]
+
+    '''def GetNumPossibleMatches(self, guess, key) -> int:
         possible = []
 
         for word in self.availibleWords:
@@ -61,7 +65,7 @@ class ComputerSolve():
             if flag > 0:
                 possible.append(word)
         
-        return len(possible)
+        return len(possible)'''
         
     '''def GetListPossibleMatches(self, guess, key) -> list:
         possible = []
@@ -77,22 +81,6 @@ class ComputerSolve():
                 possible.append(word)
         
         return possible'''
-    
-    def InsertionSort(self, unsorted) -> list:
-        n = len(unsorted)
-
-        if n <= 1:
-            return unsorted
-        
-        for i in range(1, n):
-            key = unsorted[i][1]
-            j = i - 1
-            while j >= 0 and key < unsorted[j][1]:
-                unsorted[j + 1] = unsorted[j]
-                j -= 1
-            unsorted[j + 1] = unsorted[j]
-        
-        return unsorted
 
 
 if __name__ == "__main__":
@@ -100,8 +88,8 @@ if __name__ == "__main__":
 
     #myTest.game.hiddenWord = "BLARE"
 
-    myGuessA = "CRANE"
-    myGuessB = "DOORS"
+    #myGuessA = "CRANE"
+    #myGuessB = "DOORS"
     
     #myKeyA = myTest.game.DetermineKey(myGuessA)
     #myKeyA = "01202"
@@ -111,16 +99,25 @@ if __name__ == "__main__":
 
     #myTest.GetPossibleMatches(myGuessA, myKey)
     
-    myValueA = myTest.GetExpectedValue(myGuessA)
-    myValueB = myTest.GetExpectedValue(myGuessB)
+    #myValueA = myTest.GetExpectedValue(myGuessA)
+    #myValueB = myTest.GetExpectedValue(myGuessB)
 
-    print(myValueA)
-    print(myValueB)
+    #print(myValueA)
+    #print(myValueB)
+
+    import time
+
+    start_time = time.perf_counter()
 
     #print(myTest.GetNumPossibleMatches(myGuessA, myTest.game.DetermineKey(myGuessA)))
     #print(myTest.GetNumPossibleMatches(myGuessB, myTest.game.DetermineKey(myGuessB)))
 
-    #myTest.GetOptimalGuess()
+    print(myTest.GetOptimalGuess())
+
+    end_time = time.perf_counter()
+    elapsed_time = end_time - start_time
+
+    print(f"Elapsed time: {elapsed_time:.4f} seconds")
 
     #print(myTest.game.DetermineKey("SPEED", answer="ABIDE"))
     #print(myTest.game.DetermineKey("SPEED", answer="ERASE"))
