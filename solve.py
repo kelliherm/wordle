@@ -52,36 +52,6 @@ class ComputerSolve():
 
         return sortedwordlist[0][0]
 
-    '''def GetNumPossibleMatches(self, guess, key) -> int:
-        possible = []
-
-        for word in self.availibleWords:
-            flag = 0
-            for index in range(5):
-                if key[index] == "🟩" and guess[index] == word[index]:
-                    flag += 1
-                elif key[index] == "🟨" and guess[index] in word:
-                    flag += 1
-            if flag > 0:
-                possible.append(word)
-        
-        return len(possible)'''
-        
-    '''def GetListPossibleMatches(self, guess, key) -> list:
-        possible = []
-
-        for word in self.availibleWords:
-            flag = 0
-            for index in range(5):
-                if key[index] == "2" and guess[index] == word[index]:
-                    flag += 1
-                elif key[index] == "1" and guess[index] in word:
-                    flag += 1
-            if flag > 0:
-                possible.append(word)
-        
-        return possible'''
-
 
 if __name__ == "__main__":
     myTest = ComputerSolve()
