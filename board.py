@@ -18,7 +18,6 @@ class Board():
         print()
  
     def UpdateBoard(self, guess_number, guess, key):
-        #guess = [(int(guesskey[0]),userguess[0]),(int(guesskey[1]),userguess[1]),(int(guesskey[2]),userguess[2]),(int(guesskey[3]),userguess[3]),(int(guesskey[4]),userguess[4])]
         updated_word = []
         for index in range(len(guess)):
             char_key = (guess[index], key[index])
