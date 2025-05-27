@@ -8,39 +8,45 @@ class ComputerSolve():
         self.legalWords = self.game.legalWords
         self.availibleWords = self.legalWords
         self.information = []
+        self.gameOver = False
+        self.turn = 0
     
     def Play(self):
-        print("Game is beginning")
-        first_guess = self.GetOptimalGuess(first_guess=True)
-        print(f"First guess is {first_guess}")
-        self.information.append((first_guess, self.game.DetermineKey(first_guess)))
-        print(self.information)
-        self.RemoveExtraWords(self.information)
-        second_guess = self.GetOptimalGuess()
-        print(f"Second guess is {second_guess}")
-        self.information.append((second_guess, self.game.DetermineKey(second_guess)))
-        print(self.information)
-        self.RemoveExtraWords(self.information)
-        third_guess = self.GetOptimalGuess()
-        print(f"Third guess is {third_guess}")
-        self.information.append((third_guess, self.game.DetermineKey(third_guess)))
-        print(self.information)
-        self.RemoveExtraWords(self.information)
-        fourth_guess = self.GetOptimalGuess()
-        print(f"Fourth guess is {fourth_guess}")
-        self.information.append((fourth_guess, self.game.DetermineKey(fourth_guess)))
-        print(self.information)
-        self.RemoveExtraWords(self.information)
-        fifth_guess = self.GetOptimalGuess()
-        print(f"Fifth guess is {fifth_guess}")
-        self.information.append((fifth_guess, self.game.DetermineKey(fifth_guess)))
-        print(self.information)
-        self.RemoveExtraWords(self.information)
-        sixth_guess = self.GetOptimalGuess()
-        print(f"Sixth guess is {sixth_guess}")
-        self.information.append((sixth_guess, self.game.DetermineKey(sixth_guess)))
-        print(self.information)
-        print(f"Real secret word is {self.game.secretWord}")
+        while self.gameOver == False:
+            print(f"It is turn number {self.turn + 1}.")
+            
+            self.game.board.DrawBoard()
+            
+            if self.turn == 0:
+                guess = self.GetOptimalGuess(first_guess=True)
+            else:
+                guess = self.GetOptimalGuess()
+            key = self.game.DetermineKey(guess)
+
+            self.game.board.UpdateBoard(self.turn, guess, key)
+            self.information.append((guess, key))
+
+            self.RemoveExtraWords(self.information)
+
+            self.turn += 1
+
+            if guess == self.game.secretWord:
+                self.game.board.DrawBoard()
+                print(f"The computer has won the game in {self.turn} guesses!")
+                self.gameOver = True
+            elif self.turn == 6:
+                self.game.board.DrawBoard()
+                print("The computer has lost the game.")
+                print(f"The hidden word was {self.game.secretWord}.")
+                self.gameOver = True
+    
+    def ResetGame(self):
+        self.game = game.Game()
+        self.legalWords = self.game.legalWords
+        self.availibleWords = self.legalWords
+        self.information = []
+        self.gameOver = False
+        self.turn = 0
 
     def GetExpectedValue(self, userguess) -> float:
         options = ["🟩", "🟨", "⬛"]
@@ -104,7 +110,7 @@ class ComputerSolve():
                 words_to_remove.append(word)
         for word in words_to_remove:
             self.availibleWords.remove(word)
-        print(len(self.availibleWords))
+        print(f"The number of possible answers is {len(self.availibleWords)}")
 
     def IsWordPossible(self, word, information_list) -> bool:
         for information in information_list:
