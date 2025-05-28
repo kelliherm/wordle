@@ -121,8 +121,8 @@ class ComputerSolve():
                 elif word[index] != information[0][index] and information[1][index] == "🟩":
                     return False
                 # TODO Get functionality surround yellow letters working
-                #elif word[index] in information[0] and information[1][index] == "🟨":
-                #    usedletters.append(word[index])
+                elif information[0][index] in word and information[1][index] == "🟨":
+                    pass
                 elif word[index] == information[0][index] and information[1][index] == "🟨":
                     return False
                 elif word[index] == information[0][index] and information[1][index] == "⬛":
