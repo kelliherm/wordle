@@ -8,62 +8,78 @@ class Game():
         self.board = board.Board()
         
         self.DefineLegalWords()
-        self.hiddenWord = self.DefineHiddenWord()
+        self.secretWord = self.SetSecretWord()
     
-    def Play(self):
-        while self.numGuesses < 6 and self.gameOver == False:
+    def Play(self) -> None:
+        while self.gameOver == False:
             self.board.DrawBoard()
-            print(f"You have {6 - self.numGuesses} remaining.")
-            guess = self.GetGuess() 
 
+            print(f"You have {6 - self.numGuesses} remaining.")
+
+            guess = self.GetUserGuess() 
             key = self.DetermineKey(guess)
 
             self.board.UpdateBoard(self.numGuesses, guess, key)
 
             self.numGuesses += 1
 
-            if guess == self.hiddenWord:
+            if guess == self.secretWord:
                 self.board.DrawBoard()
                 print(f"You have won the game in {self.numGuesses} guesses!")
                 self.gameOver = True
             elif self.numGuesses == 6:
                 self.board.DrawBoard()
                 print("You have lost the game.")
-                print(f"The hidden word was {self.hiddenWord}.")
+                print(f"The hidden word was {self.secretWord}.")
                 self.gameOver = True
+
+    def ResetGame(self) -> None:
+        self.gameOver = False
+        self.numGuesses = 0
+        self.board.ResetBoard()
+        self.secretWord = self.DefineHiddenWord()
 
     def DefineLegalWords(self) -> None:
         self.legalWords = []
         legalwordsfile = open("legalwords.txt")
         for line in legalwordsfile:
-            self.legalWords.append(line[:-1])
+            if line[-1] == "\n":
+                self.legalWords.append(line[:-1])
+            else:
+                self.legalWords.append(line)
         legalwordsfile.close()
-    
-    def DefineHiddenWord(self) -> str:
+
+    def SetSecretWord(self) -> str:
         return random.choice(self.legalWords)
 
-    def GetGuess(self) -> str:
+    def GetUserGuess(self) -> str:
         return input("Enter guess: ").upper()
 
         # TODO Error correction required
 
-    def DetermineKey(self, guess) -> str:
+    def DetermineKey(self, guess, answer=None) -> str:
         usedletters = []
         key = ["","","","",""]
 
+        # Allows for standalone functionality
+        if answer != None:
+            secret = answer
+        else:
+            secret = self.secretWord
+
         for digit in range(5):
-            if guess[digit] == self.hiddenWord[digit]:
-                key[digit] = "2"
+            if guess[digit] == secret[digit]:
+                key[digit] = "🟩"
                 usedletters.append(guess[digit])
 
         for digit in range(5):
-            if guess[digit] in self.hiddenWord and self.hiddenWord.count(guess[digit]) > usedletters.count(guess[digit]):
+            if guess[digit] in secret and secret.count(guess[digit]) > usedletters.count(guess[digit]):
                 if key[digit] == "":
-                    key[digit] = "1"
+                    key[digit] = "🟨"
                     usedletters.append(guess[digit])
             else:
                 if key[digit] == "":
-                    key[digit] = "0"
+                    key[digit] = "⬛"
 
         return "".join(key)
 
