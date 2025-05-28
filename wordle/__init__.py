@@ -1,3 +1,2 @@
-from game import *
-from game import *
-from solve import *
+from . import game
+from . import solve

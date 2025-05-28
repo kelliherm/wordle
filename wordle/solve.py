@@ -1,6 +1,6 @@
 import math
 import json
-import game
+from . import game
 
 class ComputerSolve():
     def __init__(self):
@@ -79,7 +79,7 @@ class ComputerSolve():
 
     def GetOptimalGuess(self, first_guess=False) -> str:
         if first_guess == True:
-            with open("data.json", "r") as file:
+            with open("wordle\\data.json", "r") as file:
                 possibleguesses = json.load(file)
 
             sortedwordlist = sorted(possibleguesses.items(), key=lambda item: item[1], reverse=True)
@@ -92,10 +92,10 @@ class ComputerSolve():
         for word in wordslist:
             possibleguesses[word] = self.GetExpectedValue(word)
 
-        '''with open("data.json", "w") as file:
+        '''with open("wordle\\data.json", "w") as file:
             json.dump(possibleguesses, file, indent=4)
 
-        with open("data.json", "r") as file:
+        with open("wordle\\data.json", "r") as file:
             possibleguesses = json.load(file)'''
 
         sortedwordlist = sorted(possibleguesses.items(), key=lambda item: item[1], reverse=True)

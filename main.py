@@ -1,3 +1,4 @@
-import game
+import wordle
 
-myGame = game.Game()
+myGame = wordle.game.Game()
+myGame.Play()

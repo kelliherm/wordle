@@ -1,5 +1,5 @@
 import random
-import board
+from . import board
 
 class Game():
     def __init__(self, computer=False):
@@ -41,7 +41,7 @@ class Game():
 
     def DefineLegalWords(self) -> None:
         self.legalWords = []
-        legalwordsfile = open("legalwords.txt")
+        legalwordsfile = open("wordle\\legalwords.txt")
         for line in legalwordsfile:
             if line[-1] == "\n":
                 self.legalWords.append(line[:-1])
