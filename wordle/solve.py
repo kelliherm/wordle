@@ -11,7 +11,7 @@ class ComputerSolve():
         self.gameOver = False
         self.turn = 0
     
-    def Play(self):
+    def Play(self, return_data=False):
         while self.gameOver == False:
             print(f"It is turn number {self.turn + 1}.")
             
@@ -32,12 +32,20 @@ class ComputerSolve():
 
             if guess == self.game.secretWord:
                 self.game.board.DrawBoard()
-                print(f"The computer has won the game in {self.turn} guesses!")
+                if return_data == False:
+                    print(f"The computer has won the game in {self.turn} guesses!")
+                if return_data == True:
+                    data = f"{self.game.secretWord} 1 {self.turn}" 
+                    return data
                 self.gameOver = True
             elif self.turn == 6:
                 self.game.board.DrawBoard()
-                print("The computer has lost the game.")
-                print(f"The hidden word was {self.game.secretWord}.")
+                if return_data == False:
+                    print("The computer has lost the game.")
+                    print(f"The hidden word was {self.game.secretWord}.")
+                if return_data == True:
+                    data = f"{self.game.secretWord} 0 {self.turn}" 
+                    return data
                 self.gameOver = True
     
     def ResetGame(self):
