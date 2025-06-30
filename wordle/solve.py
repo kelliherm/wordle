@@ -35,7 +35,7 @@ class ComputerSolve():
                 if return_data == False:
                     print(f"The computer has won the game in {self.turn} guesses!")
                 if return_data == True:
-                    data = f"{self.game.secretWord} 1 {self.turn}" 
+                    data = f"{self.game.secretWord} 1 {self.turn}\n" 
                     return data
                 self.gameOver = True
             elif self.turn == 6:
@@ -44,7 +44,7 @@ class ComputerSolve():
                     print("The computer has lost the game.")
                     print(f"The hidden word was {self.game.secretWord}.")
                 if return_data == True:
-                    data = f"{self.game.secretWord} 0 {self.turn}" 
+                    data = f"{self.game.secretWord} 0 {self.turn}\n" 
                     return data
                 self.gameOver = True
     
