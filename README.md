@@ -1,5 +1,8 @@
 # Wordle Algorithms
 
+> [!WARNING]  
+> This branch `refactor` has breaking changes and is not currently in a working state. It is under active development and will be function when it has been merged into the `main` branch.
+
 A collection of algorithms to solve the game of Wordle. There is currently an algorithm to solve Wordle using the computer, which runs completely by itself. The game itself uses all possible 5 letter words in the English language. Additionally, there is a human playable version of the game. It similarly uses all of possible 5 letter words as a potential hidden word.
 
 The game can be easily played from the command line. In order to do so, enter the following command while in the same directory as `main.py`.
