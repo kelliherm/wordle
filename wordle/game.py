@@ -4,7 +4,11 @@ import random
 import board
 
 class Game:
-    def __init__(self) -> None:      
+    def __init__(self, diffuculty="hard", guess_length=5) -> None:      
+        self.difficulty = diffuculty
+        self.game_over = False
+        self.guess_length = guess_length
+        
         self.load_words()
         self.setup_game()
 
@@ -16,9 +20,30 @@ class Game:
 
         # TODO Add error handling to user guess system, check value word, etc.
 
-    @staticmethod
-    def return_guess_complete(self, guess, hidden_word=None) -> list:
-        pass
+    def return_guess_list(self, guess, hidden_word=None) -> list:
+        if hidden_word == None:
+            hidden_word = self.hidden_word
+        
+        guess_list = [{"CHAR" : char,
+                       "COL" : None} for char in guess]
+        
+        for index in range(self.guess_length):
+            if guess[index] == hidden_word[index]:
+                guess_list[index]["COL"] = "GREEN"
+            elif guess[index] not in hidden_word:
+                guess_list[index]["COL"] = "BLACK"
+
+        return guess_list
+    
+    def set_hidden_word(self, hidden_word=None):
+        if hidden_word != None:
+            self.hidden_word = hidden_word
+        elif self.difficulty == "hard":
+            self.hidden_word = random.choice(self.all_words)
+        elif self.difficulty == "easy":
+            self.hidden_word = random.choice(self.nyt_words)
+        
+        # TODO Add edge case testing and error correction
 
     def load_words(self) -> None:
         words_file = open("wordle\\words.json", "r")  # TODO Figure out python filestructure system for loading words/folder usage
@@ -30,6 +55,7 @@ class Game:
     def setup_game(self) -> None:
         self.board = board.Board()
         self.guess_number = 1
+        self.set_hidden_word()
 
     def reset_game(self) -> None:
         self.board.reset_board()
@@ -43,3 +69,5 @@ class Game:
 
 if __name__ == "__main__":
     my_game = Game()
+
+    print(my_game.return_guess_list(guess="SALET"))
