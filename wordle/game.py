@@ -1,10 +1,11 @@
+import collections
 import json
 import random
 
 import board
 
 class Game:
-    def __init__(self, diffuculty="hard", guess_length=5) -> None:      
+    def __init__(self, diffuculty: str="hard", guess_length: int=5) -> None:      
         self.difficulty = diffuculty
         self.game_over = False
         self.guess_length = guess_length
@@ -20,20 +21,32 @@ class Game:
 
         # TODO Add error handling to user guess system, check value word, etc.
 
-    def return_guess_list(self, guess, hidden_word=None) -> list:
+    def return_guess_list(self, guess: str, hidden_word: str=None) -> list:
         if hidden_word == None:
-            hidden_word = self.hidden_word
+            hidden = self.hidden_word
+        else:
+            hidden = hidden_word
         
-        guess_list = [{"CHAR" : char,
-                       "COL" : None} for char in guess]
+        guess = list(guess)
+        hidden = list(hidden)
         
-        for index in range(self.guess_length):
-            if guess[index] == hidden_word[index]:
-                guess_list[index]["COL"] = "GREEN"
-            elif guess[index] not in hidden_word:
-                guess_list[index]["COL"] = "BLACK"
+        result = [{"CHAR" : char,
+                    "COL" : "BLACK"} for char in guess]
+        
+        for i in range(self.guess_length):
+            if guess[i] == hidden[i]:
+                result[i]["COL"] = "GREEN"
+                guess[i] = None
+                hidden[i] = None
+        
+        unmatched_counts = collections.Counter(filter(None, hidden))
 
-        return guess_list
+        for i in range(self.guess_length):
+            if guess[i] is not None and unmatched_counts[guess[i]] > 0:
+                result[i]["COL"] = "YELLOW"
+                unmatched_counts[guess[i]] -= 1
+
+        return result
     
     def set_hidden_word(self, hidden_word=None):
         if hidden_word != None:
@@ -70,4 +83,9 @@ class Game:
 if __name__ == "__main__":
     my_game = Game()
 
-    print(my_game.return_guess_list(guess="SALET"))
+    my_game.board.update_board(my_game.return_guess_list("SPEED", hidden_word="ABIDE"))
+    my_game.board.update_board(my_game.return_guess_list("SPEED", hidden_word="ERASE"))
+    my_game.board.update_board(my_game.return_guess_list("SPEED", hidden_word="STEAL"))
+    my_game.board.update_board(my_game.return_guess_list("SPEED", hidden_word="CREPE"))
+
+    my_game.board.draw_board()

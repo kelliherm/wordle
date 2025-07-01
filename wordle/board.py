@@ -9,11 +9,8 @@ class Board:
         self.board = [[] for i in range(self.number_of_guesses)]
         self.colors = {
             "GREEN" : colorama.Fore.GREEN,
-            "G" : colorama.Fore.GREEN,
             "YELLOW" : colorama.Fore.YELLOW,
-            "Y" : colorama.Fore.YELLOW,
             "BLACK" : colorama.Fore.BLACK,
-            "B" : colorama.Fore.BLACK,
             "RESET" : colorama.Style.RESET_ALL,
         }
     
