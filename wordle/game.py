@@ -7,9 +7,11 @@ import random
 import board
 
 class Game:
-    def __init__(self, diffuculty: str="hard", guess_length: int=5) -> None:      
+    def __init__(self, diffuculty: str="hard", guess_length: int=5, name: str="Player") -> None:      
         self.difficulty = diffuculty
         self.guess_length = guess_length
+
+        self.name = name
 
         self.load_words()
         self.setup()
@@ -27,7 +29,7 @@ class Game:
         self.board.draw()
 
     def get_user_guess(self) -> str:
-        return input("What is the player's guess?  ").upper()
+        return input(f"What is {self.name}'s guess?  ").upper()
 
         # TODO Add error handling to user guess system, check value word, etc.
 
@@ -43,16 +45,18 @@ class Game:
             self.display(message=f"It is guess number {self.guess_number}.")
             guess = self.get_user_guess()
 
-            self.board.update(self.return_guess_list(guess))
+            guess_key = self.return_guess_key(guess)
+
+            self.board.update(self.return_guess_list(guess, guess_key))
 
             if guess == self.hidden_word:
                 self.game_over = True
-                self.display(message=f"The player has won the game. It took {self.guess_number} to guess the hidden word.")
+                self.display(message=f"{self.name} has won the game. It took {self.guess_number} to guess the hidden word.")
 
             self.guess_number += 1
             if self.guess_number > 6:
                 self.game_over = True
-                self.display(message=f"The player has lost the game. The hidden word was {self.hidden_word}.")
+                self.display(message=f"{self.name} has lost the game. The hidden word was {self.hidden_word}.")
         
         answer = input("Would you like to play again? [Y/n]  ").lower()
         if answer in ("yes", "y"):
@@ -83,7 +87,7 @@ class Game:
         self.guess_number = 1
         self.set_hidden_word()
 
-    def return_guess_list(self, guess: str, hidden_word: str=None) -> list:
+    def return_guess_key(self, guess: str, hidden_word: str=None) -> str:
         if hidden_word == None:
             hidden = self.hidden_word
         else:
@@ -92,12 +96,11 @@ class Game:
         guess = list(guess)
         hidden = list(hidden)
         
-        result = [{"CHAR" : char,
-                    "COL" : "BLACK"} for char in guess]
+        result = ["⬛" for char in guess]
         
         for i in range(self.guess_length):
             if guess[i] == hidden[i]:
-                result[i]["COL"] = "GREEN"
+                result[i] = "🟩"
                 guess[i] = None
                 hidden[i] = None
         
@@ -105,9 +108,21 @@ class Game:
 
         for i in range(self.guess_length):
             if guess[i] is not None and unmatched_counts[guess[i]] > 0:
-                result[i]["COL"] = "YELLOW"
+                result[i] = "🟨"
                 unmatched_counts[guess[i]] -= 1
 
+        return "".join(result)
+
+    def return_guess_list(self, guess: str, key: str) -> list:
+        key_map = {
+            "🟩" : "GREEN",
+            "🟨" : "YELLOW",
+            "⬛" : "BLACK",
+        }
+
+        result = [{"CHAR" : guess[index],
+                    "COL" : key_map[key[index]]} for index in range(self.guess_length)]
+        
         return result
     
 
