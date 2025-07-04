@@ -12,19 +12,19 @@ class Game:
         self.guess_length = guess_length
 
         self.load_words()
-        self.setup_game()
+        self.setup()
 
-    def destroy_game(self) -> None:
-        self.board.destroy_board()
+    def destroy(self) -> None:
+        self.board.destroy()
 
-    def display_game(self, message="") -> None:
+    def display(self, message="") -> None:
         if platform.system() == "Windows":
             os.system("cls")
         else:
             os.system("clear")
         if message != "":
             print(message)
-        self.board.draw_board()
+        self.board.draw()
 
     def get_user_guess(self) -> str:
         return input("What is the player's guess?  ").upper()
@@ -38,34 +38,34 @@ class Game:
         self.all_words = words["all_legal"]
         words_file.close()
 
-    def play_game(self) -> None:
+    def play(self) -> None:
         while not self.game_over:
-            self.display_game(message=f"It is guess number {self.guess_number}.")
+            self.display(message=f"It is guess number {self.guess_number}.")
             guess = self.get_user_guess()
 
-            self.board.update_board(self.return_guess_list(guess))
+            self.board.update(self.return_guess_list(guess))
 
             if guess == self.hidden_word:
                 self.game_over = True
-                self.display_game(message=f"The player has won the game. It took {self.guess_number} to guess the hidden word.")
+                self.display(message=f"The player has won the game. It took {self.guess_number} to guess the hidden word.")
 
             self.guess_number += 1
             if self.guess_number > 6:
                 self.game_over = True
-                self.display_game(message=f"The player has lost the game. The hidden word was {self.hidden_word}.")
+                self.display(message=f"The player has lost the game. The hidden word was {self.hidden_word}.")
         
         answer = input("Would you like to play again? [Y/n]  ").lower()
         if answer in ("yes", "y"):
-            self.reset_game()
+            self.reset()
         else:
-            self.destroy_game()
+            self.destroy()
 
-    def reset_game(self) -> None:
-        self.board.reset_board()
+    def reset(self) -> None:
+        self.board.reset()
         self.game_over = False
         self.guess_number = 1
         self.set_hidden_word()
-        self.play_game()
+        self.play()
 
     def set_hidden_word(self, hidden_word=None):
         if hidden_word != None:
@@ -77,7 +77,7 @@ class Game:
         
         # TODO Add edge case testing and error correction
 
-    def setup_game(self) -> None:
+    def setup(self) -> None:
         self.board = board.Board()
         self.game_over = False
         self.guess_number = 1
@@ -112,11 +112,11 @@ class Game:
     
 
 if __name__ == "__main__":
-    my_game = Game()
+    my_game = Game(diffuculty="easy")
 
     #my_game.board.update_board(my_game.return_guess_list("SPEED", hidden_word="ABIDE"))
     #my_game.board.update_board(my_game.return_guess_list("SPEED", hidden_word="ERASE"))
     #my_game.board.update_board(my_game.return_guess_list("SPEED", hidden_word="STEAL"))
     #my_game.board.update_board(my_game.return_guess_list("SPEED", hidden_word="CREPE"))
 
-    my_game.play_game()
+    my_game.play()

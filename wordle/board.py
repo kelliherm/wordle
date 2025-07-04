@@ -14,10 +14,10 @@ class Board:
             "RESET" : colorama.Style.RESET_ALL,
         }
     
-    def destroy_board(self) -> None:
+    def destroy(self) -> None:
         colorama.deinit()
 
-    def draw_board(self) -> None:
+    def draw(self) -> None:
         for row_index in range(self.number_of_guesses):
             print(row_index + 1, end="  ")
             if self.board[row_index] != []:
@@ -25,10 +25,10 @@ class Board:
                     print(self.colors[character_dict["COL"]] + character_dict["CHAR"], end="")
             print(self.colors["RESET"])
     
-    def reset_board(self) -> None:
+    def reset(self) -> None:
         self.board = [[] for i in range(self.number_of_guesses)]
 
-    def update_board(self, guess_list, guess_num=None) -> None:
+    def update(self, guess_list, guess_num=None) -> None:
         if guess_num != None:
             self.board[guess_num - 1] = guess_list
         else:
@@ -41,7 +41,7 @@ class Board:
 if __name__ == "__main__":
     my_board = Board()
 
-    my_board.update_board([{"CHAR" : "S",
+    my_board.update([{"CHAR" : "S",
                             "COL" : "BLACK",},
                             {"CHAR" : "A",
                              "COL" : "BLACK"},
@@ -52,7 +52,7 @@ if __name__ == "__main__":
                             {"CHAR" : "T",
                              "COL" : "GREEN"}])
 
-    my_board.update_board([{"CHAR" : "G",
+    my_board.update([{"CHAR" : "G",
                             "COL" : "GREEN",},
                             {"CHAR" : "I",
                              "COL" : "YELLOW"},
@@ -63,4 +63,4 @@ if __name__ == "__main__":
                             {"CHAR" : "T",
                              "COL" : "GREEN"}])
     
-    my_board.draw_board()
+    my_board.draw()
