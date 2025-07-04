@@ -20,8 +20,7 @@ class ComputerSolve:
         for key_combination in key_combinations:
             keys[key_combination] = 0
 
-        words_list = self.legalWords
-        #words_list = self.availibleWords
+        words_list = self.game.all_words
         n = len(words_list)
 
         # TODO Find a better method for determining the words list
@@ -38,8 +37,26 @@ class ComputerSolve:
         
         return expected_value
 
-    def get_top_guesses(self):
-        pass
+    def get_top_guesses(self, mode="rw"):
+        if "w" in mode:
+            result = {}
+            for word in self.game.all_words:
+                expected_value = self.get_expected_value(word)
+                result[word] = expected_value
+                print(word, expected_value)
+            with open("first_guess.json", "w") as file:
+                json.dump(result, file, indent=4)
+                file.close()
+        
+        if "r" in mode:
+            try:
+                with open("first_guess.json", "r") as file:
+                    self.guess_data = json.load(file)
+                self.guess_data = sorted(self.guess_data.items(), key=lambda item: item[1], reverse=True)
+                print(self.guess_data[0:10])
+            except:
+                print("File does not exist.")
+
 
     def play(self):
         pass
@@ -53,3 +70,5 @@ class ComputerSolve:
 
 if __name__ == "__main__":
     my_solve = ComputerSolve()
+
+    my_solve.get_top_guesses(mode= "r")
