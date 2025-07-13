@@ -44,13 +44,13 @@ class ComputerSolve:
                 expected_value = self.get_expected_value(word)
                 result[word] = expected_value
                 print(word, expected_value)
-            with open("first_guess.json", "w") as file:
+            with open("wordle\\first_guess.json", "w") as file:
                 json.dump(result, file, indent=4)
                 file.close()
         
         if "r" in mode:
             try:
-                with open("first_guess.json", "r") as file:
+                with open("wordle\\first_guess.json", "r") as file:
                     self.guess_data = json.load(file)
                 self.guess_data = sorted(self.guess_data.items(), key=lambda item: item[1], reverse=True)
                 print(self.guess_data[0:10])
@@ -71,4 +71,4 @@ class ComputerSolve:
 if __name__ == "__main__":
     my_solve = ComputerSolve()
 
-    my_solve.get_top_guesses(mode= "r")
+    my_solve.get_top_guesses(mode="r")
