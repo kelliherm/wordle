@@ -1,66 +1,41 @@
 import colorama
 
 class Board:
-    def __init__(self, number_of_guesses=6) -> None:
+    def __init__(self) -> None:
         colorama.init()
+        
+        self.board = [[] for i in range(6)]
 
-        self.number_of_guesses = number_of_guesses
+        """
+        self.board is format as an array of arrays. The first array consists
+        of each possible guess and their corresponding key. The guess number
+        is the index of the array inside of self.board + 1. The array that
+        holds the guess and the key looks like ["GUESS", "KEY"]. The possible
+        values for "KEY" are "G", "Y", and "B". An example of the guess "LIGHT"
+        with the seond and third positions being correct with the final position
+        being partially correct would look like ["LIGHT", "BGGBY"].
+        """
 
-        self.board = [[] for i in range(self.number_of_guesses)]
         self.colors = {
-            "GREEN" : colorama.Fore.GREEN,
-            "YELLOW" : colorama.Fore.YELLOW,
-            "BLACK" : colorama.Fore.BLACK,
+            "G" : colorama.Fore.GREEN,
+            "Y" : colorama.Fore.YELLOW,
+            "B" : colorama.Fore.BLACK,
             "RESET" : colorama.Style.RESET_ALL,
         }
     
-    def destroy(self) -> None:
-        colorama.deinit()
-
-    def draw(self) -> None:
-        for row_index in range(self.number_of_guesses):
+    def draw_board(self) -> None:
+        for row_index in range(6):
             print(row_index + 1, end="  ")
             if self.board[row_index] != []:
-                for character_dict in self.board[row_index]:
-                    print(self.colors[character_dict["COL"]] + character_dict["CHAR"], end="")
+                for char_index in range(5):
+                    print(self.colors[self.board[row_index][1][char_index]],
+                          self.board[row_index][0][char_index],
+                          sep="",
+                          end="",)
             print(self.colors["RESET"])
     
-    def reset(self) -> None:
-        self.board = [[] for i in range(self.number_of_guesses)]
-
-    def update(self, guess_list, guess_num=None) -> None:
-        if guess_num != None:
-            self.board[guess_num - 1] = guess_list
-        else:
-            for row_index in range(self.number_of_guesses):
-                if self.board[row_index] == []:
-                    self.board[row_index] = guess_list
-                    break
-
-
-if __name__ == "__main__":
-    my_board = Board()
-
-    my_board.update([{"CHAR" : "S",
-                            "COL" : "BLACK",},
-                            {"CHAR" : "A",
-                             "COL" : "BLACK"},
-                            {"CHAR" : "L",
-                             "COL" : "BLACK"},
-                            {"CHAR" : "E",
-                             "COL" : "BLACK"},
-                            {"CHAR" : "T",
-                             "COL" : "GREEN"}])
-
-    my_board.update([{"CHAR" : "G",
-                            "COL" : "GREEN",},
-                            {"CHAR" : "I",
-                             "COL" : "YELLOW"},
-                            {"CHAR" : "A",
-                             "COL" : "BLACK"},
-                            {"CHAR" : "N",
-                             "COL" : "BLACK"},
-                            {"CHAR" : "T",
-                             "COL" : "GREEN"}])
-    
-    my_board.draw()
+    def update_board(self, guess: str, key: str) -> None:
+        for row_index in range(6):
+            if self.board[row_index] == []:
+                self.board[row_index] = [guess, key]
+                break

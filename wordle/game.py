@@ -7,17 +7,19 @@ import random
 import board
 
 class Game:
-    def __init__(self, diffuculty: str="hard", guess_length: int=5, name: str="Player") -> None:      
-        self.difficulty = diffuculty
-        self.guess_length = guess_length
-
+    def __init__(self, name: str="Player") -> None:
+        self.board = board.Board()
+        self.game_over = False
+        self.guess_number = 1
         self.name = name
 
-        self.load_words()
-        self.setup()
+        with open("wordle\\words.json", "r") as f:
+            self.legal_words = json.load(f)
+            f.close()
+        
+        # TODO Figure out python filestructure system for loading words/folder usage
 
-    def destroy(self) -> None:
-        self.board.destroy()
+        self.hidden_word = random.choice(self.legal_words)
 
     def display(self, message="") -> None:
         if platform.system() == "Windows":
@@ -26,19 +28,12 @@ class Game:
             os.system("clear")
         if message != "":
             print(message)
-        self.board.draw()
+        self.board.draw_board()
 
     def get_user_guess(self) -> str:
-        return input(f"What is {self.name}'s guess?  ").upper()
+        return input(f"What is {self.name}'s guess?  ").strip().upper()
 
         # TODO Add error handling to user guess system, check value word, etc.
-
-    def load_words(self) -> None:
-        words_file = open("wordle\\words.json", "r")  # TODO Figure out python filestructure system for loading words/folder usage
-        words = json.load(words_file)
-        self.nyt_words = words["nyt_legal"]
-        self.all_words = words["all_legal"]
-        words_file.close()
 
     def play(self) -> None:
         while not self.game_over:
@@ -47,7 +42,7 @@ class Game:
 
             guess_key = self.return_guess_key(guess)
 
-            self.board.update(self.return_guess_list(guess, guess_key))
+            self.board.update_board(guess, guess_key)
 
             if guess == self.hidden_word:
                 self.game_over = True
@@ -62,30 +57,14 @@ class Game:
         if answer in ("yes", "y"):
             self.reset()
         else:
-            self.destroy()
+            None
 
     def reset(self) -> None:
-        self.board.reset()
-        self.game_over = False
-        self.guess_number = 1
-        self.set_hidden_word()
-        self.play()
-
-    def set_hidden_word(self, hidden_word=None):
-        if hidden_word != None:
-            self.hidden_word = hidden_word
-        elif self.difficulty == "hard":
-            self.hidden_word = random.choice(self.all_words)
-        elif self.difficulty == "easy":
-            self.hidden_word = random.choice(self.nyt_words)
-        
-        # TODO Add edge case testing and error correction
-
-    def setup(self) -> None:
         self.board = board.Board()
         self.game_over = False
         self.guess_number = 1
-        self.set_hidden_word()
+        self.hidden_word = random.choice(self.legal_words)
+        self.play()
 
     def return_guess_key(self, guess: str, hidden_word: str=None) -> str:
         if hidden_word == None:
@@ -96,42 +75,23 @@ class Game:
         guess = list(guess)
         hidden = list(hidden)
         
-        result = ["⬛" for char in guess]
+        result = ["B" for char in guess]
         
-        for i in range(self.guess_length):
+        for i in range(5):
             if guess[i] == hidden[i]:
-                result[i] = "🟩"
+                result[i] = "G"
                 guess[i] = None
                 hidden[i] = None
         
         unmatched_counts = collections.Counter(filter(None, hidden))
 
-        for i in range(self.guess_length):
+        for i in range(5):
             if guess[i] is not None and unmatched_counts[guess[i]] > 0:
-                result[i] = "🟨"
+                result[i] = "Y"
                 unmatched_counts[guess[i]] -= 1
 
         return "".join(result)
 
-    def return_guess_list(self, guess: str, key: str) -> list:
-        key_map = {
-            "🟩" : "GREEN",
-            "🟨" : "YELLOW",
-            "⬛" : "BLACK",
-        }
-
-        result = [{"CHAR" : guess[index],
-                    "COL" : key_map[key[index]]} for index in range(self.guess_length)]
-        
-        return result
-    
-
 if __name__ == "__main__":
-    my_game = Game(diffuculty="easy")
-
-    #my_game.board.update_board(my_game.return_guess_list("SPEED", hidden_word="ABIDE"))
-    #my_game.board.update_board(my_game.return_guess_list("SPEED", hidden_word="ERASE"))
-    #my_game.board.update_board(my_game.return_guess_list("SPEED", hidden_word="STEAL"))
-    #my_game.board.update_board(my_game.return_guess_list("SPEED", hidden_word="CREPE"))
-
+    my_game = Game()
     my_game.play()

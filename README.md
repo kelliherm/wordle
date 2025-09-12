@@ -1,36 +1,16 @@
-# Wordle Algorithms
+# Wordle Game
 
-> [!WARNING]  
-> This branch `refactor` has breaking changes and is not currently in a working state. It is under active development and will be function when it has been merged into the `main` branch.
+> [!CAUTION]
+> This code is still under development and is not currently in an operational state.
 
-A collection of algorithms to solve the game of Wordle. There is currently an algorithm to solve Wordle using the computer, which runs completely by itself. The game itself uses all possible 5 letter words in the English language. Additionally, there is a human playable version of the game. It similarly uses all of possible 5 letter words as a potential hidden word.
+## Rules
 
-The game can be easily played from the command line. In order to do so, enter the following command while in the same directory as `main.py`.
+In the game Wordle, you have to guess a hidden five-letter word within six tries, using color-coded feedback to guide subsequent guesses. A green tile means the letter is correct and in the right spot, yellow means the letter is in the word but in the wrong spot, and gray means the letter isn't in the word at all. Your guess must be considered a valid English word.
 
-```bash
-python main.py human
-```
+## How to Play
 
-In order to watch the computer attempt to solve the game, enter the following command.
+It is recommended to use `uv` for this project in order to simplify dependency management.
 
-```bash
-python main.py computer
-```
-
-Example code for both the human playable and the computer playable code can be found is the large code blocks below.
-
-```python
-import wordle
-
-myGame = wordle.game.Game()
-myGame.Play()
-```
-
-In order to have the computer solve the game, the following code is used. It will follow the computer as it tries to win the game.
-
-```python
-import wordle
-
-myGame = wordle.solve.ComputerSolve()
-myGame.play()
+```shell
+uv run main.py
 ```
